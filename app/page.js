@@ -14,6 +14,7 @@ import {
   deleteDoc,
   getDoc,
 } from 'firebase/firestore'
+import ImageScannerComponent from './ImageScannerComponent'
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -91,21 +92,26 @@ export default function Home() {
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
+  const handleItemsDetected = (detectedItems) => {
+    detectedItems.forEach(item => addItem(item));
+  };
+
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
       <Typography variant="h3" component="h1" gutterBottom align="center" color="primary">
         Inventory Management System
       </Typography>
       
-      <Button
-        variant="contained"
-        startIcon={<AddIcon />}
-        onClick={handleOpen}
-        sx={{ mb: 4 }}
-        fullWidth
-      >
-        Add New Item
-      </Button>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 4 }}>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={handleOpen}
+        >
+          Add New Item
+        </Button>
+        <ImageScannerComponent onItemsDetected={handleItemsDetected} />
+      </Box>
 
       {inventory.map(({ name, quantity }) => (
         <StyledPaper key={name} elevation={1}>
